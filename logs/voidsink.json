@@ -23,3 +23,11 @@
 {"level":"info","time":"2025-12-29T09:43:05Z","message":"Shutting down HTTP Infinite Trap"}
 {"level":"info","time":"2025-12-29T09:43:05Z","message":"Shutting down HTTP Infinite Trap"}
 {"level":"info","time":"2025-12-29T09:43:05Z","message":"VoidSink shutdown complete"}
+{"level":"info","time":"2025-12-29T12:48:11Z","message":"VoidSink starting up..."}
+{"level":"info","triplets":1340,"time":"2025-12-29T12:48:11Z","message":"Heffalump Markov chain loaded"}
+{"level":"info","type":"HTTPInfinite","addr":"0.0.0.0:8080","time":"2025-12-29T12:48:11Z","message":"Trap enabled"}
+{"level":"info","address":"0.0.0.0:8080","time":"2025-12-29T12:48:11Z","message":"Starting HTTP Infinite Trap"}
+{"level":"info","time":"2025-12-29T12:51:54Z","message":"Shutting down VoidSink..."}
+{"level":"info","time":"2025-12-29T12:51:54Z","message":"Shutting down HTTP Infinite Trap"}
+{"level":"info","time":"2025-12-29T12:51:54Z","message":"Shutting down HTTP Infinite Trap"}
+{"level":"info","time":"2025-12-29T12:51:54Z","message":"VoidSink shutdown complete"}

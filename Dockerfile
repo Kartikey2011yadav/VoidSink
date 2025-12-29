@@ -17,9 +17,10 @@ FROM gcr.io/distroless/static-debian12
 WORKDIR /app
 
 COPY --from=builder /app/VoidSink /app/VoidSink
-COPY docker_config.toml /config/config.toml
+COPY configs/config.yaml /app/configs/config.yaml
 COPY assets /app/assets
 
 EXPOSE 8080
+EXPOSE 9090
 
-ENTRYPOINT ["/app/VoidSink", "-c", "/config/config.toml"]
+ENTRYPOINT ["/app/VoidSink", "-c", "/app/configs/config.yaml"]
