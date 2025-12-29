@@ -2,6 +2,8 @@ module github.com/Kartikey2011yadav/voidsink
 
 go 1.24
 
+toolchain go1.24.1
+
 require (
 	github.com/knadh/koanf v1.5.0
 	github.com/rs/zerolog v1.31.0
