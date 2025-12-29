@@ -3,3 +3,7 @@
 {"level":"info","address":"0.0.0.0:8080","time":"2025-12-29T08:54:30Z","message":"Starting HTTP Infinite Trap"}
 {"level":"info","path":"/robots.txt","remote_addr":"172.18.0.1:35176","time":"2025-12-29T08:55:11Z","message":"Trap hit"}
 {"level":"info","path":"/test","remote_addr":"172.18.0.1:49694","time":"2025-12-29T08:55:30Z","message":"Trap hit"}
+{"level":"info","time":"2025-12-29T09:00:43Z","message":"Shutting down VoidSink..."}
+{"level":"info","time":"2025-12-29T09:00:43Z","message":"Shutting down HTTP Infinite Trap"}
+{"level":"info","time":"2025-12-29T09:00:43Z","message":"Shutting down HTTP Infinite Trap"}
+{"level":"info","time":"2025-12-29T09:00:43Z","message":"VoidSink shutdown complete"}

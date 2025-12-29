@@ -52,7 +52,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            name/voidsink
+            kartikey2011yadav/voidsink
             ghcr.io/${{ github.repository }}
           tags: |
             type=ref,event=branch
