@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"io"
 	"os"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func Setup(level string) {
+func Setup(level string, logFile string, logFormat string) {
 	// Set global log level
 	l, err := zerolog.ParseLevel(level)
 	if err != nil {
@@ -16,6 +17,21 @@ func Setup(level string) {
 	}
 	zerolog.SetGlobalLevel(l)
 
-	// Pretty print for development
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339})
+	var output io.Writer = os.Stderr
+
+	if logFile != "" {
+		f, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to open log file, using stderr")
+		} else {
+			output = f
+		}
+	}
+
+	if logFormat == "json" {
+		log.Logger = zerolog.New(output).With().Timestamp().Logger()
+	} else {
+		// Pretty print for console
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: output, TimeFormat: time.RFC3339})
+	}
 }

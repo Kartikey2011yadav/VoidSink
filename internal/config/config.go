@@ -2,17 +2,21 @@ package config
 
 import (
 	"log"
+	"path/filepath"
 	"strings"
 
 	"github.com/knadh/koanf"
+	"github.com/knadh/koanf/parsers/toml"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/file"
 )
 
 type Config struct {
-	LogLevel string `koanf:"log_level"`
-	Traps    struct {
+	LogLevel  string `koanf:"log_level"`
+	LogFile   string `koanf:"log_file"`
+	LogFormat string `koanf:"log_format"`
+	Traps     struct {
 		HTTPInfinite struct {
 			Enabled bool   `koanf:"enabled"`
 			Addr    string `koanf:"addr"`
@@ -23,8 +27,20 @@ type Config struct {
 var k = koanf.New(".")
 
 func Load(path string) (*Config, error) {
+	// Determine parser based on extension
+	var parser koanf.Parser
+	ext := strings.ToLower(filepath.Ext(path))
+	switch ext {
+	case ".yaml", ".yml":
+		parser = yaml.Parser()
+	case ".toml":
+		parser = toml.Parser()
+	default:
+		parser = yaml.Parser()
+	}
+
 	// Load from file
-	if err := k.Load(file.Provider(path), yaml.Parser()); err != nil {
+	if err := k.Load(file.Provider(path), parser); err != nil {
 		log.Printf("Error loading config file: %v", err)
 	}
 

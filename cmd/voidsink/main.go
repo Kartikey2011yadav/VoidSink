@@ -2,20 +2,26 @@ package main
 
 import (
 	"context"
+	"flag"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 	"time"
+
 	"github.com/Kartikey2011yadav/voidsink/internal/config"
 	"github.com/Kartikey2011yadav/voidsink/internal/logger"
 	"github.com/Kartikey2011yadav/voidsink/internal/trap"
+
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
+	configPath := flag.String("c", "configs/config.yaml", "Path to configuration file")
+	flag.Parse()
+
 	// 1. Load Configuration
-	cfg, err := config.Load("configs/config.yaml")
+	cfg, err := config.Load(*configPath)
 	if err != nil {
 		// Fallback or fatal? Let's just log and exit if we can't load config.
 		// But config.Load handles missing file gracefully (returns empty config).
@@ -24,7 +30,7 @@ func main() {
 	}
 
 	// 2. Setup Logger
-	logger.Setup(cfg.LogLevel)
+	logger.Setup(cfg.LogLevel, cfg.LogFile, cfg.LogFormat)
 	log.Info().Msg("VoidSink starting up...")
 
 	// 3. Initialize Traps

@@ -1,0 +1,7 @@
+log_level = "info"
+log_file = "/logs/voidsink.json"
+log_format = "json"
+
+[traps.http_infinite]
+enabled = true
+addr = "0.0.0.0:8080"

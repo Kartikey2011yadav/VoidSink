@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  voidsink:
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/logs
+      - ./docker_config.toml:/config/config.toml
