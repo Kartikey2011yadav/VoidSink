@@ -1,6 +1,11 @@
 log_level: debug
 
+metrics:
+  enabled: true
+  addr: ":9090"
+
 traps:
   http_infinite:
     enabled: true
     addr: ":8080"
+    server_name: "nginx"

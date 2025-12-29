@@ -16,10 +16,15 @@ type Config struct {
 	LogLevel  string `koanf:"log_level"`
 	LogFile   string `koanf:"log_file"`
 	LogFormat string `koanf:"log_format"`
-	Traps     struct {
+	Metrics   struct {
+		Enabled bool   `koanf:"enabled"`
+		Addr    string `koanf:"addr"`
+	} `koanf:"metrics"`
+	Traps struct {
 		HTTPInfinite struct {
-			Enabled bool   `koanf:"enabled"`
-			Addr    string `koanf:"addr"`
+			Enabled    bool   `koanf:"enabled"`
+			Addr       string `koanf:"addr"`
+			ServerName string `koanf:"server_name"`
 		} `koanf:"http_infinite"`
 	} `koanf:"traps"`
 }

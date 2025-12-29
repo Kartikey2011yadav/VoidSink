@@ -7,6 +7,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/rs/zerolog/log"
 )
@@ -42,7 +44,7 @@ func (h *Heffalump) load(path string) error {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	scanner.Split(bufio.ScanWords)
+	scanner.Split(ScanHTML)
 
 	var w1, w2 string
 
@@ -119,4 +121,47 @@ func (h *Heffalump) Seed() (string, string) {
 		return parts[0], parts[1]
 	}
 	return "the", "void"
+}
+
+// ScanHTML is a basic split function for a Scanner that returns each
+// space-separated word of text or HTML tag, with surrounding spaces deleted.
+// It will never return an empty string. The definition of space is set by
+// unicode.IsSpace.
+func ScanHTML(data []byte, atEOF bool) (advance int, token []byte, err error) {
+	// Skip leading spaces.
+	var r rune
+	var start = 0
+	for width := 0; start < len(data); start += width {
+		r, width = utf8.DecodeRune(data[start:])
+		if !unicode.IsSpace(r) {
+			break
+		}
+	}
+	switch {
+	case r == '<':
+		// Scan until closing bracket
+		for i := start; i < len(data); i++ {
+			if data[i] == '>' {
+				return i + 1, data[start : i+1], nil
+			}
+		}
+	default:
+		// Scan until space, marking end of word.
+		for width, i := 0, start; i < len(data); i += width {
+			var r rune
+			r, width = utf8.DecodeRune(data[i:])
+			if unicode.IsSpace(r) {
+				return i + width, data[start:i], nil
+			}
+			if r == '<' {
+				return i, data[start:i], nil
+			}
+		}
+	}
+	// If we're at EOF, we have a final, non-empty, non-terminated word. Return it.
+	if atEOF && len(data) > start {
+		return len(data), data[start:], nil
+	}
+	// Request more data.
+	return start, nil, nil
 }

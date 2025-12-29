@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"net/http"
 	"os"
 	"os/signal"
 	"sync"
@@ -14,6 +15,7 @@ import (
 	"github.com/Kartikey2011yadav/voidsink/internal/logger"
 	"github.com/Kartikey2011yadav/voidsink/internal/trap"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
 )
 
@@ -41,11 +43,22 @@ func main() {
 		log.Fatal().Err(err).Msg("Failed to initialize Heffalump engine")
 	}
 
+	// 3.5 Start Metrics Server
+	if cfg.Metrics.Enabled {
+		go func() {
+			http.Handle("/metrics", promhttp.Handler())
+			log.Info().Str("addr", cfg.Metrics.Addr).Msg("Starting Metrics Server")
+			if err := http.ListenAndServe(cfg.Metrics.Addr, nil); err != nil {
+				log.Error().Err(err).Msg("Metrics server failed")
+			}
+		}()
+	}
+
 	// 4. Initialize Traps
 	var traps []trap.Trap
 
 	if cfg.Traps.HTTPInfinite.Enabled {
-		t := trap.NewHTTPInfiniteTrap(cfg.Traps.HTTPInfinite.Addr, heffalumpEngine)
+		t := trap.NewHTTPInfiniteTrap(cfg.Traps.HTTPInfinite.Addr, cfg.Traps.HTTPInfinite.ServerName, heffalumpEngine)
 		traps = append(traps, t)
 		log.Info().Str("type", "HTTPInfinite").Str("addr", cfg.Traps.HTTPInfinite.Addr).Msg("Trap enabled")
 	}

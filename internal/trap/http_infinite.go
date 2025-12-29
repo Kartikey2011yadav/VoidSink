@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/Kartikey2011yadav/voidsink/internal/heffalump"
+	"github.com/Kartikey2011yadav/voidsink/internal/telemetry"
 	"github.com/rs/zerolog/log"
 	"github.com/valyala/fasthttp"
 )
@@ -13,18 +14,20 @@ import (
 // HTTPInfiniteTrap implements the Trap interface for an HTTP honeypot
 // that streams infinite data to clients.
 type HTTPInfiniteTrap struct {
-	addr      string
-	server    *fasthttp.Server
-	heffalump *heffalump.Heffalump
-	pool      *heffalump.BufferPool
+	addr       string
+	serverName string
+	server     *fasthttp.Server
+	heffalump  *heffalump.Heffalump
+	pool       *heffalump.BufferPool
 }
 
 // NewHTTPInfiniteTrap creates a new instance of HTTPInfiniteTrap.
-func NewHTTPInfiniteTrap(addr string, h *heffalump.Heffalump) *HTTPInfiniteTrap {
+func NewHTTPInfiniteTrap(addr, serverName string, h *heffalump.Heffalump) *HTTPInfiniteTrap {
 	return &HTTPInfiniteTrap{
-		addr:      addr,
-		heffalump: h,
-		pool:      heffalump.NewBufferPool(),
+		addr:       addr,
+		serverName: serverName,
+		heffalump:  h,
+		pool:       heffalump.NewBufferPool(),
 	}
 }
 
@@ -32,7 +35,7 @@ func NewHTTPInfiniteTrap(addr string, h *heffalump.Heffalump) *HTTPInfiniteTrap 
 func (t *HTTPInfiniteTrap) Start(ctx context.Context) error {
 	t.server = &fasthttp.Server{
 		Handler: t.requestHandler,
-		Name:    "VoidSink/1.0",
+		Name:    t.serverName,
 		// Increase timeouts to allow long-running connections (it's a trap after all)
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 0, // Infinite
@@ -67,6 +70,8 @@ func (t *HTTPInfiniteTrap) requestHandler(ctx *fasthttp.RequestCtx) {
 	path := string(ctx.Path())
 	log.Info().Str("path", path).Str("remote_addr", ctx.RemoteAddr().String()).Msg("Trap hit")
 
+	telemetry.TrapsTriggered.WithLabelValues("http_infinite", path).Inc()
+
 	switch path {
 	case "/robots.txt":
 		ctx.SetContentType("text/plain")
@@ -75,6 +80,9 @@ func (t *HTTPInfiniteTrap) requestHandler(ctx *fasthttp.RequestCtx) {
 		// HellPot logic: Stream infinite Markov chain data
 		ctx.SetContentType("text/html")
 		ctx.SetBodyStreamWriter(func(w *bufio.Writer) {
+			telemetry.ActiveConnections.Inc()
+			defer telemetry.ActiveConnections.Dec()
+
 			// Get a buffer from the pool
 			buf := t.pool.Get()
 			defer t.pool.Put(buf)
@@ -93,11 +101,13 @@ func (t *HTTPInfiniteTrap) requestHandler(ctx *fasthttp.RequestCtx) {
 				}
 
 				// Write the buffer to the network
-				if _, err := w.Write(buf.Bytes()); err != nil {
+				n, err := w.Write(buf.Bytes())
+				if err != nil {
 					// Connection closed by client or error
 					log.Debug().Err(err).Msg("Connection closed during streaming")
 					return
 				}
+				telemetry.BytesSent.Add(float64(n))
 
 				// Flush to ensure data is sent
 				if err := w.Flush(); err != nil {
