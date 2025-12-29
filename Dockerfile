@@ -18,6 +18,7 @@ WORKDIR /app
 
 COPY --from=builder /app/VoidSink /app/VoidSink
 COPY docker_config.toml /config/config.toml
+COPY assets /app/assets
 
 EXPOSE 8080
 

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/Kartikey2011yadav/voidsink/internal/config"
+	"github.com/Kartikey2011yadav/voidsink/internal/heffalump"
 	"github.com/Kartikey2011yadav/voidsink/internal/logger"
 	"github.com/Kartikey2011yadav/voidsink/internal/trap"
 
@@ -33,11 +34,18 @@ func main() {
 	logger.Setup(cfg.LogLevel, cfg.LogFile, cfg.LogFormat)
 	log.Info().Msg("VoidSink starting up...")
 
-	// 3. Initialize Traps
+	// 3. Initialize Heffalump Engine
+	// TODO: Make the corpus path configurable in config.yaml
+	heffalumpEngine, err := heffalump.New("assets/corpus.txt")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to initialize Heffalump engine")
+	}
+
+	// 4. Initialize Traps
 	var traps []trap.Trap
 
 	if cfg.Traps.HTTPInfinite.Enabled {
-		t := trap.NewHTTPInfiniteTrap(cfg.Traps.HTTPInfinite.Addr)
+		t := trap.NewHTTPInfiniteTrap(cfg.Traps.HTTPInfinite.Addr, heffalumpEngine)
 		traps = append(traps, t)
 		log.Info().Str("type", "HTTPInfinite").Str("addr", cfg.Traps.HTTPInfinite.Addr).Msg("Trap enabled")
 	}
@@ -47,7 +55,7 @@ func main() {
 		return
 	}
 
-	// 4. Start Traps
+	// 5. Start Traps
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -62,13 +70,13 @@ func main() {
 		}(t)
 	}
 
-	// 5. Wait for Interrupt Signal
+	// 6. Wait for Interrupt Signal
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Info().Msg("Shutting down VoidSink...")
 
-	// 6. Graceful Shutdown
+	// 7. Graceful Shutdown
 	cancel() // Signal traps to stop
 
 	// Give traps some time to cleanup

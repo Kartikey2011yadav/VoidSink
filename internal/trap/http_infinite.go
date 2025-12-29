@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"context"
 	"time"
-	"github.com/Kartikey2011yadav/voidsink/pkg/markov"
 
+	"github.com/Kartikey2011yadav/voidsink/internal/heffalump"
 	"github.com/rs/zerolog/log"
 	"github.com/valyala/fasthttp"
 )
@@ -15,14 +15,16 @@ import (
 type HTTPInfiniteTrap struct {
 	addr      string
 	server    *fasthttp.Server
-	generator *markov.Generator
+	heffalump *heffalump.Heffalump
+	pool      *heffalump.BufferPool
 }
 
 // NewHTTPInfiniteTrap creates a new instance of HTTPInfiniteTrap.
-func NewHTTPInfiniteTrap(addr string) *HTTPInfiniteTrap {
+func NewHTTPInfiniteTrap(addr string, h *heffalump.Heffalump) *HTTPInfiniteTrap {
 	return &HTTPInfiniteTrap{
 		addr:      addr,
-		generator: markov.NewGenerator(),
+		heffalump: h,
+		pool:      heffalump.NewBufferPool(),
 	}
 }
 
@@ -31,13 +33,13 @@ func (t *HTTPInfiniteTrap) Start(ctx context.Context) error {
 	t.server = &fasthttp.Server{
 		Handler: t.requestHandler,
 		Name:    "VoidSink/1.0",
+		// Increase timeouts to allow long-running connections (it's a trap after all)
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 0, // Infinite
+		IdleTimeout:  30 * time.Second,
 	}
 
 	log.Info().Str("address", t.addr).Msg("Starting HTTP Infinite Trap")
-
-	// ListenAndServe blocks. We can use a goroutine to handle context cancellation if needed,
-	// but usually Shutdown is called from another goroutine (e.g. signal handler).
-	// However, to respect the context passed in Start, we should monitor it.
 
 	errChan := make(chan error, 1)
 	go func() {
@@ -70,26 +72,45 @@ func (t *HTTPInfiniteTrap) requestHandler(ctx *fasthttp.RequestCtx) {
 		ctx.SetContentType("text/plain")
 		ctx.WriteString("User-agent: *\nDisallow: /")
 	default:
-		// HellPot logic: Stream infinite data
+		// HellPot logic: Stream infinite Markov chain data
 		ctx.SetContentType("text/html")
 		ctx.SetBodyStreamWriter(func(w *bufio.Writer) {
+			// Get a buffer from the pool
+			buf := t.pool.Get()
+			defer t.pool.Put(buf)
+
+			// Seed the generator for this connection
+			w1, w2 := t.heffalump.Seed()
+
 			for {
-				// Generate a chunk of data
-				chunk := t.generator.Generate(1024) // 1KB chunk
-				if _, err := w.Write(chunk); err != nil {
+				// Fill the buffer with ~4KB of data
+				// We check buf.Len() < 4000 to leave a little room for the last word
+				for buf.Len() < 4000 {
+					w3 := t.heffalump.Next(w1, w2)
+					buf.WriteString(w3)
+					buf.WriteByte(' ') // Add space
+					w1, w2 = w2, w3
+				}
+
+				// Write the buffer to the network
+				if _, err := w.Write(buf.Bytes()); err != nil {
 					// Connection closed by client or error
 					log.Debug().Err(err).Msg("Connection closed during streaming")
 					return
 				}
-				if _, err := w.Write([]byte("\n")); err != nil {
-					return
-				}
+
+				// Flush to ensure data is sent
 				if err := w.Flush(); err != nil {
 					return
 				}
-				// Small sleep to control rate if necessary, or just blast it.
-				// HellPot usually blasts it, but let's be nice to CPU for now.
-				time.Sleep(10 * time.Millisecond)
+
+				// Reset buffer for next iteration
+				buf.Reset()
+
+				// Optional: Small sleep to prevent 100% CPU usage if the network is too fast
+				// In a real honeypot, you might want to limit bitrate to keep them hooked longer
+				// without burning your own bandwidth.
+				// time.Sleep(50 * time.Millisecond)
 			}
 		})
 	}

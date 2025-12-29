@@ -1,0 +1,681 @@
+The quick brown fox jumps over the lazy dog.
+The lazy dog sleeps in the sun.
+The sun is bright and hot today.
+Today is a good day to code.
+Code is poetry for machines.
+Machines dream of electric sheep.
+Sheep jump over the fence.
+The fence is white and tall.
+Tall trees grow in the forest.
+The forest is dark and deep.
+Deep learning is a subset of machine learning.
+Machine learning models data.
+Data is the new oil.
+Oil fuels the engine.
+The engine roars to life.
+Life is a journey not a destination.
+The destination is unknown.
+Unknown errors occurred.
+Errors are opportunities to learn.
+Learn to walk before you run.
+Run fast and break things.
+Things fall apart.
+Apart from that, everything is fine.
+Fine dining is expensive.
+Expensive cars drive fast.
+Fast food is unhealthy.
+Unhealthy habits shorten life.
+Life is short, eat dessert first.
+First impressions matter.
+Matter is composed of atoms.
+Atoms are mostly empty space.
+Space is the final frontier.
+Frontier technologies change the world.
+The world is round.
+Round and round it goes.
+Goes without saying.
+Saying goodbye is hard.
+Hard work pays off.
+Off to the races.
+Races are won by the swift.
+Swift is a programming language.
+Language is a tool for communication.
+Communication is key.
+Key to success is persistence.
+Persistence beats resistance.
+Resistance is futile.
+Futile attempts were made.
+Made in China.
+China is a large country.
+Country roads take me home.
+Home is where the heart is.
+Heart of gold.
+Gold rush.
+Rush hour traffic.
+Traffic jam.
+Jam session.
+Session cookies.
+Cookies are delicious.
+Delicious food.
+Food for thought.
+Thought provoking.
+Provoking the bear.
+Bear market.
+Market crash.
+Crash course.
+Course of action.
+Action speaks louder than words.
+Words can hurt.
+Hurt feelings.
+Feelings are valid.
+Valid argument.
+Argument handling.
+Handling errors.
+Errors in judgment.
+Judgment day.
+Day and night.
+Night owl.
+Owl hoots.
+Hoots and hollers.
+Hollers at the moon.
+Moon landing.
+Landing page.
+Page not found.
+Found missing link.
+Link in bio.
+Bio diversity.
+Diversity is strength.
+Strength in numbers.
+Numbers don't lie.
+Lie detector.
+Detector rail.
+Rail road.
+Road trip.
+Trip advisor.
+Advisor board.
+Board game.
+Game over.
+Over and out.
+Out of the blue.
+Blue sky.
+Sky high.
+High five.
+Five stars.
+Stars shine bright.
+Bright future.
+Future proof.
+Proof of concept.
+Concept art.
+Art gallery.
+Gallery view.
+View source.
+Source code.
+Code review.
+Review process.
+Process monitor.
+Monitor resolution.
+Resolution independence.
+Independence day.
+Day off.
+Off switch.
+Switch gears.
+Gears of war.
+War and peace.
+Peace of mind.
+Mind over matter.
+Matter of fact.
+Fact check.
+Check mate.
+Mate tea.
+Tea time.
+Time flies.
+Flies buzz.
+Buzz word.
+Word of mouth.
+Mouth guard.
+Guard dog.
+Dog days.
+Days of thunder.
+Thunder storm.
+Storm chaser.
+Chaser drink.
+Drink water.
+Water fall.
+Fall down.
+Down town.
+Town hall.
+Hall of fame.
+Fame and fortune.
+Fortune cookie.
+Cookie monster.
+Monster truck.
+Truck driver.
+Driver license.
+License to kill.
+Kill switch.
+Switch blade.
+Blade runner.
+Runner up.
+Up and down.
+Down under.
+Under cover.
+Cover up.
+Up stream.
+Stream line.
+Line up.
+Up grade.
+Grade school.
+School bus.
+Bus stop.
+Stop sign.
+Sign language.
+Language barrier.
+Barrier reef.
+Reef shark.
+Shark tank.
+Tank top.
+Top hat.
+Hat trick.
+Trick or treat.
+Treat yourself.
+Self care.
+Care bear.
+Bear hug.
+Hug it out.
+Out loud.
+Loud speaker.
+Speaker phone.
+Phone call.
+Call back.
+Back up.
+Up tight.
+Tight rope.
+Rope ladder.
+Ladder logic.
+Logic gate.
+Gate keeper.
+Keeper of the keys.
+Keys to the kingdom.
+Kingdom hearts.
+Hearts and minds.
+Minds eye.
+Eye of the tiger.
+Tiger woods.
+Woods hole.
+Hole in one.
+One way.
+Way out.
+Out side.
+Side walk.
+Walk away.
+Away game.
+Game plan.
+Plan ahead.
+Ahead of time.
+Time zone.
+Zone out.
+Out cast.
+Cast away.
+Away team.
+Team work.
+Work hard.
+Hard drive.
+Drive safe.
+Safe house.
+House party.
+Party time.
+Time travel.
+Travel ban.
+Ban hammer.
+Hammer time.
+Time warp.
+Warp speed.
+Speed limit.
+Limit less.
+Less is more.
+More or less.
+Less than zero.
+Zero tolerance.
+Tolerance level.
+Level up.
+Up lift.
+Lift off.
+Off road.
+Road map.
+Map quest.
+Quest log.
+Log file.
+File system.
+System error.
+Error code.
+Code red.
+Red alert.
+Alert system.
+System admin.
+Admin access.
+Access denied.
+Denied entry.
+Entry level.
+Level playing field.
+Field trip.
+Trip wire.
+Wire tap.
+Tap water.
+Water melon.
+Melon ball.
+Ball park.
+Park place.
+Place holder.
+Holder of the sacred chalice.
+Chalice dungeon.
+Dungeon master.
+Master class.
+Class act.
+Act up.
+Up start.
+Start menu.
+Menu bar.
+Bar code.
+Code breaker.
+Breaker box.
+Box office.
+Office space.
+Space ship.
+Ship wreck.
+Wreck it ralph.
+Ralph lauren.
+Lauren hill.
+Hill top.
+Top gun.
+Gun shy.
+Shy guy.
+Guy fawkes.
+Fawkes the phoenix.
+Phoenix rising.
+Rising sun.
+Sun set.
+Set up.
+Up date.
+Date night.
+Night light.
+Light bulb.
+Bulb flower.
+Flower pot.
+Pot luck.
+Luck of the draw.
+Draw bridge.
+Bridge the gap.
+Gap year.
+Year book.
+Book worm.
+Worm hole.
+Hole punch.
+Punch line.
+Line dance.
+Dance floor.
+Floor plan.
+Plan b.
+B movie.
+Movie star.
+Star wars.
+Wars trek.
+Trek bike.
+Bike lane.
+Lane change.
+Change log.
+Log in.
+In side.
+Side effect.
+Effect size.
+Size matters.
+Matters of state.
+State of the art.
+Art deco.
+Deco ration.
+Ration pack.
+Pack man.
+Man power.
+Power plant.
+Plant life.
+Life style.
+Style sheet.
+Sheet music.
+Music video.
+Video game.
+Game theory.
+Theory of relativity.
+Relativity space.
+Space time.
+Time out.
+Out law.
+Law and order.
+Order up.
+Up shot.
+Shot gun.
+Gun powder.
+Powder room.
+Room mate.
+Mate ship.
+Ship shape.
+Shape up.
+Up turn.
+Turn over.
+Over coat.
+Coat hanger.
+Hanger on.
+On time.
+Time table.
+Table top.
+Top secret.
+Secret agent.
+Agent smith.
+Smith and wesson.
+Wesson oil.
+Oil rig.
+Rig up.
+Up hill.
+Hill side.
+Side kick.
+Kick start.
+Start up.
+Up load.
+Load balance.
+Balance sheet.
+Sheet metal.
+Metal gear.
+Gear solid.
+Solid state.
+State park.
+Park bench.
+Bench press.
+Press release.
+Release date.
+Date stamp.
+Stamp collection.
+Collection agency.
+Agency fee.
+Fee simple.
+Simple mind.
+Mind set.
+Set off.
+Off set.
+Set screw.
+Screw driver.
+Driver seat.
+Seat belt.
+Belt buckle.
+Buckle up.
+Up root.
+Root cause.
+Cause and effect.
+Effect pedal.
+Pedal to the metal.
+Metal band.
+Band width.
+Width and height.
+Height map.
+Map editor.
+Editor in chief.
+Chief executive.
+Executive order.
+Order form.
+Form factor.
+Factor analysis.
+Analysis paralysis.
+Paralysis by analysis.
+Analysis result.
+Result set.
+Set theory.
+Theory craft.
+Craft beer.
+Beer belly.
+Belly dance.
+Dance off.
+Off white.
+White house.
+House music.
+Music box.
+Box cutter.
+Cutter ship.
+Ship yard.
+Yard stick.
+Stick figure.
+Figure out.
+Out fit.
+Fit bit.
+Bit coin.
+Coin toss.
+Toss up.
+Up standing.
+Standing ovation.
+Ovation guitar.
+Guitar hero.
+Hero journey.
+Journey home.
+Home run.
+Run away.
+Away message.
+Message board.
+Board meeting.
+Meeting room.
+Room service.
+Service pack.
+Pack animal.
+Animal kingdom.
+Kingdom come.
+Come back.
+Back pack.
+Pack rat.
+Rat race.
+Race car.
+Car wash.
+Wash out.
+Out post.
+Post office.
+Office chair.
+Chair man.
+Man made.
+Made up.
+Up front.
+Front line.
+Line backer.
+Back bone.
+Bone dry.
+Dry run.
+Run time.
+Time stamp.
+Stamp pad.
+Pad lock.
+Lock down.
+Down time.
+Time frame.
+Frame rate.
+Rate limit.
+Limit break.
+Break down.
+Down load.
+Load screen.
+Screen shot.
+Shot put.
+Put down.
+Down size.
+Size up.
+Up scale.
+Scale model.
+Model train.
+Train station.
+Station wagon.
+Wagon wheel.
+Wheel chair.
+Chair lift.
+Lift up.
+Up hold.
+Hold on.
+On line.
+Line up.
+Up set.
+Set back.
+Back door.
+Door way.
+Way back.
+Back slide.
+Slide rule.
+Rule book.
+Book mark.
+Mark up.
+Up keep.
+Keep out.
+Out take.
+Take over.
+Over time.
+Time card.
+Card board.
+Board walk.
+Walk way.
+Way point.
+Point out.
+Out look.
+Look out.
+Out run.
+Run off.
+Off hand.
+Hand shake.
+Shake down.
+Down fall.
+Fall out.
+Out source.
+Source map.
+Map view.
+View point.
+Point break.
+Break point.
+Point guard.
+Guard rail.
+Rail way.
+Way bill.
+Bill board.
+Board room.
+Room key.
+Key board.
+Board game.
+Game play.
+Play time.
+Time piece.
+Piece of cake.
+Cake walk.
+Walk through.
+Through put.
+Put out.
+Out put.
+Put in.
+In put.
+Put on.
+On set.
+Set up.
+Up rise.
+Rise up.
+Up beat.
+Beat down.
+Down beat.
+Beat box.
+Box set.
+Set piece.
+Piece meal.
+Meal time.
+Time line.
+Line item.
+Item list.
+List view.
+View port.
+Port hole.
+Hole punch.
+Punch out.
+Out cold.
+Cold cut.
+Cut off.
+Off cut.
+Cut out.
+Out side.
+Side bar.
+Bar chart.
+Chart top.
+Top tier.
+Tier list.
+List price.
+Price tag.
+Tag team.
+Team mate.
+Mate rial.
+Real time.
+Time lag.
+Lag time.
+Time off.
+Off day.
+Day break.
+Break fast.
+Fast lane.
+Lane way.
+Way side.
+Side show.
+Show time.
+Time slot.
+Slot machine.
+Machine code.
+Code base.
+Base line.
+Line drive.
+Drive way.
+Way fare.
+Fare well.
+Well being.
+Being human.
+Human race.
+Race track.
+Track suit.
+Suit case.
+Case study.
+Study guide.
+Guide book.
+Book case.
+Case file.
+File name.
+Name tag.
+Tag line.
+Line art.
+Art work.
+Work shop.
+Shop lift.
+Lift gate.
+Gate way.
+Way out.
+Out let.
+Let go.
+Go to.
+To do.
+Do it.
+It is.
+Is it.
+It was.
+Was it.
+It will.
+Will it.
+It can.
+Can it.
+It has.
+Has it.
+It had.
+Had it.
+It does.
+Does it.
+It did.
+Did it.
+It should.
+Should it.
+It would.
+Would it.
+It could.
+Could it.
+It might.
+Might it.
+It must.
+Must it.
