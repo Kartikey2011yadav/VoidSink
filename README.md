@@ -31,94 +31,54 @@ When a bot connects to VoidSink, it is fed an endless stream of Markov-chain-gen
 - **Modular Design**: Interface-based architecture (`Trap` interface) allows easy addition of new protocols (SSH, SMTP, TCP) without refactoring the core.
 - **Cloud Native**: Multi-stage Docker builds, structured JSON logging (`zerolog`), and 12-factor app configuration.
 
-## Architecture: VoidSink vs. HellPot
+## Documentation
 
-VoidSink is an architectural evolution of the HellPot concept:
+Detailed documentation is available in the `docs/` directory:
 
-| Feature | HellPot | VoidSink |
-| :--- | :--- | :--- |
-| **Design** | Monolithic HTTP Server | **Modular Framework** (Supports multiple Trap types) |
-| **Engine** | Stream-oriented `io.Reader` | **Logic-oriented State Machine** (Decoupled generation) |
-| **Config** | TOML | **Koanf** (YAML, JSON, Env Vars, Flags) |
-| **Metrics** | External Exporters | **Native Prometheus Integration** |
-| **Stealth** | Basic | **Header Masquerading & HTML Tokenization** |
+- [Architecture Overview](docs/architecture.md): Learn about the modular design and core components.
+- [The Heffalump Engine](docs/heffalump_engine.md): Understand how the infinite text generation works.
+- [Monitoring & Metrics](docs/monitoring.md): Guide to the Prometheus and Grafana setup.
+- [Configuration](docs/configuration.md): Reference for config files and environment variables.
 
 ## Installation & Usage
 
-### Option 1: Docker (Recommended)
+### Option 1: Full Stack (Recommended)
+
+The easiest way to run VoidSink with full monitoring (Grafana + Prometheus) is using Docker Compose.
+
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/Kartikey2011yadav/voidsink.git
+    cd voidsink
+    ```
+
+2.  **Start the stack**:
+    ```bash
+    docker-compose up -d
+    ```
+
+3.  **Access the services**:
+    - **VoidSink (Tarpit)**: `http://localhost:8080` (This is the trap!)
+    - **Grafana**: `http://localhost:3000` (Login: `admin`/`admin`)
+    - **Prometheus**: `http://localhost:9091`
+
+### Option 2: Standalone Docker
+
+If you only want the tarpit without the monitoring stack:
 
 ```bash
-# Pull the latest image
-docker pull kartikey2011yadav/voidsink:latest
-
-# Run with default settings
-docker run -d -p 8080:8080 -p 9090:9090 --name voidsink kartikey2011yadav/voidsink:latest
-```
-
-### Option 2: Docker Compose
-
-```yaml
-version: '3.8'
-services:
-  voidsink:
-    image: kartikey2011yadav/voidsink:latest
-    ports:
-      - "8080:8080" # Trap Port
-      - "9090:9090" # Metrics Port
-    volumes:
-      - ./configs/config.yaml:/app/configs/config.yaml
-    restart: always
+docker build -t voidsink .
+docker run -p 8080:8080 -p 9090:9090 voidsink
 ```
 
 ### Option 3: Build from Source
 
-**Prerequisites**: Go 1.25+
+Requires Go 1.21+.
 
 ```bash
-# Clone the repository
-git clone https://github.com/Kartikey2011yadav/voidsink.git
-cd voidsink
-
-# Build the binary
-go build -o voidsink ./cmd/voidsink
-
-# Run
-./voidsink -c configs/config.yaml
+go build -o voidsink cmd/voidsink/main.go
+./voidsink
 ```
-
-## Configuration
-
-VoidSink uses a flexible configuration system. You can configure it via `configs/config.yaml`:
-
-```yaml
-# Logging Configuration
-log_level: debug # debug, info, warn, error
-log_format: json # json, console
-
-# Prometheus Metrics
-metrics:
-  enabled: true
-  addr: ":9090"
-
-# Trap Configuration
-traps:
-  http_infinite:
-    enabled: true
-    addr: ":8080"
-    # Masquerade as a real server to fool scanners
-    server_name: "nginx" 
-```
-
-## Monitoring
-
-VoidSink exposes Prometheus metrics at `http://localhost:9090/metrics`.
-
-**Key Metrics:**
-
-- `voidsink_active_connections`: Number of bots currently trapped.
-- `voidsink_bytes_sent_total`: Total garbage data sent to attackers.
-- `voidsink_traps_triggered_total`: Count of hits per endpoint (e.g., `/wp-login.php`).
-
 ## Contributing
 
 Contributions are welcome! Whether it's adding a new Trap type (SSH, Telnet), improving the Heffalump engine, or fixing bugs.
