@@ -24,3 +24,7 @@ traps:
     enabled: true
     addr: ":8083"
     server_name: "nginx"
+  login_trap:
+    enabled: true
+    addr: ":8084"
+    server_name: "admin-panel"

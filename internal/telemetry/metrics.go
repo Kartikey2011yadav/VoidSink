@@ -23,4 +23,10 @@ var (
 		Name: "voidsink_traps_triggered_total",
 		Help: "The total number of times a trap has been hit",
 	}, []string{"trap_type", "path"})
+
+	// CredentialsCaptured tracks the number of credentials harvested.
+	CredentialsCaptured = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "voidsink_credentials_captured_total",
+		Help: "The total number of credentials captured from login traps",
+	})
 )
