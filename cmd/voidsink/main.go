@@ -16,6 +16,8 @@ import (
 	"github.com/Kartikey2011yadav/voidsink/internal/trap"
 	httptrap "github.com/Kartikey2011yadav/voidsink/internal/traps/http"
 	jsontrap "github.com/Kartikey2011yadav/voidsink/internal/traps/json"
+	spidertrap "github.com/Kartikey2011yadav/voidsink/internal/traps/spider"
+	"github.com/Kartikey2011yadav/voidsink/pkg/notifier"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
@@ -28,9 +30,6 @@ func main() {
 	// 1. Load Configuration
 	cfg, err := config.Load(*configPath)
 	if err != nil {
-		// Fallback or fatal? Let's just log and exit if we can't load config.
-		// But config.Load handles missing file gracefully (returns empty config).
-		// If it returns error it's a parsing error.
 		panic(err)
 	}
 
@@ -38,45 +37,27 @@ func main() {
 	logger.Setup(cfg.LogLevel, cfg.LogFile, cfg.LogFormat)
 	log.Info().Msg("VoidSink starting up...")
 
-	// 3. Initialize Heffalump Engine
-	// TODO: Make the corpus path configurable in config.yaml
+	// 3. Initialize Core Components
 	heffalumpEngine, err := heffalump.New("assets/corpus.txt")
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to initialize Heffalump engine")
 	}
 
-	// 3.5 Start Metrics Server
+	alertNotifier := notifier.New(cfg.Notification.WebhookURL)
+
+	// 4. Start Metrics Server
 	if cfg.Metrics.Enabled {
-		go func() {
-			http.Handle("/metrics", promhttp.Handler())
-			log.Info().Str("addr", cfg.Metrics.Addr).Msg("Starting Metrics Server")
-			if err := http.ListenAndServe(cfg.Metrics.Addr, nil); err != nil {
-				log.Error().Err(err).Msg("Metrics server failed")
-			}
-		}()
+		go startMetricsServer(cfg.Metrics.Addr)
 	}
 
-	// 4. Initialize Traps
-	var traps []trap.Trap
-
-	if cfg.Traps.HTTPInfinite.Enabled {
-		t := httptrap.New(cfg.Traps.HTTPInfinite.Addr, cfg.Traps.HTTPInfinite.ServerName, heffalumpEngine)
-		traps = append(traps, t)
-		log.Info().Str("type", "HTTPInfinite").Str("addr", cfg.Traps.HTTPInfinite.Addr).Msg("Trap enabled")
-	}
-
-	if cfg.Traps.JSONInfinite.Enabled {
-		t := jsontrap.New(cfg.Traps.JSONInfinite.Addr, cfg.Traps.JSONInfinite.ServerName, heffalumpEngine)
-		traps = append(traps, t)
-		log.Info().Str("type", "JSONInfinite").Str("addr", cfg.Traps.JSONInfinite.Addr).Msg("Trap enabled")
-	}
-
+	// 5. Initialize Traps
+	traps := initializeTraps(cfg, heffalumpEngine, alertNotifier)
 	if len(traps) == 0 {
 		log.Warn().Msg("No traps enabled. Exiting.")
 		return
 	}
 
-	// 5. Start Traps
+	// 6. Start Traps
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -91,26 +72,53 @@ func main() {
 		}(t)
 	}
 
-	// 6. Wait for Interrupt Signal
+	// 7. Wait for Interrupt Signal
+	waitForShutdown(cancel, traps, &wg)
+}
+
+func startMetricsServer(addr string) {
+	http.Handle("/metrics", promhttp.Handler())
+	log.Info().Str("addr", addr).Msg("Starting Metrics Server")
+	if err := http.ListenAndServe(addr, nil); err != nil {
+		log.Error().Err(err).Msg("Metrics server failed")
+	}
+}
+
+func initializeTraps(cfg *config.Config, h *heffalump.Heffalump, n *notifier.Notifier) []trap.Trap {
+	var traps []trap.Trap
+
+	if cfg.Traps.HTTPInfinite.Enabled {
+		t := httptrap.New(cfg.Traps.HTTPInfinite.Addr, cfg.Traps.HTTPInfinite.ServerName, h, n)
+		traps = append(traps, t)
+		log.Info().Str("type", "HTTPInfinite").Str("addr", cfg.Traps.HTTPInfinite.Addr).Msg("Trap enabled")
+	}
+
+	if cfg.Traps.JSONInfinite.Enabled {
+		t := jsontrap.New(cfg.Traps.JSONInfinite.Addr, cfg.Traps.JSONInfinite.ServerName, h, n)
+		traps = append(traps, t)
+		log.Info().Str("type", "JSONInfinite").Str("addr", cfg.Traps.JSONInfinite.Addr).Msg("Trap enabled")
+	}
+
+	if cfg.Traps.SpiderTrap.Enabled {
+		t := spidertrap.New(cfg.Traps.SpiderTrap.Addr, cfg.Traps.SpiderTrap.ServerName, h, n)
+		traps = append(traps, t)
+		log.Info().Str("type", "SpiderTrap").Str("addr", cfg.Traps.SpiderTrap.Addr).Msg("Trap enabled")
+	}
+
+	return traps
+}
+
+func waitForShutdown(cancel context.CancelFunc, traps []trap.Trap, wg *sync.WaitGroup) {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Info().Msg("Shutting down VoidSink...")
 
-	// 7. Graceful Shutdown
 	cancel() // Signal traps to stop
 
-	// Give traps some time to cleanup
 	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer shutdownCancel()
 
-	// We can also call Shutdown() explicitly on traps if they don't respect context cancellation in Start()
-	// But our interface design implies Start(ctx) should handle it.
-	// However, for completeness, let's iterate and call Shutdown just in case Start is blocking on something else.
-	// But wait, if Start blocks, we can't call Shutdown on the same object easily unless we stored them.
-	// We have them in `traps` slice.
-
-	// Let's do explicit Shutdown calls in parallel or sequence
 	var shutdownWg sync.WaitGroup
 	for _, t := range traps {
 		shutdownWg.Add(1)
@@ -122,7 +130,6 @@ func main() {
 		}(t)
 	}
 	shutdownWg.Wait()
-
-	wg.Wait() // Wait for Start() goroutines to return
+	wg.Wait()
 	log.Info().Msg("VoidSink shutdown complete")
 }

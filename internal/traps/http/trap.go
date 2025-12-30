@@ -7,6 +7,7 @@ import (
 
 	"github.com/Kartikey2011yadav/voidsink/internal/heffalump"
 	"github.com/Kartikey2011yadav/voidsink/internal/telemetry"
+	"github.com/Kartikey2011yadav/voidsink/pkg/notifier"
 	"github.com/rs/zerolog/log"
 	"github.com/valyala/fasthttp"
 )
@@ -19,15 +20,17 @@ type HTTPInfiniteTrap struct {
 	server     *fasthttp.Server
 	heffalump  *heffalump.Heffalump
 	pool       *heffalump.BufferPool
+	notifier   *notifier.Notifier
 }
 
 // New creates a new instance of HTTPInfiniteTrap.
-func New(addr, serverName string, h *heffalump.Heffalump) *HTTPInfiniteTrap {
+func New(addr, serverName string, h *heffalump.Heffalump, n *notifier.Notifier) *HTTPInfiniteTrap {
 	return &HTTPInfiniteTrap{
 		addr:       addr,
 		serverName: serverName,
 		heffalump:  h,
 		pool:       heffalump.NewBufferPool(),
+		notifier:   n,
 	}
 }
 
@@ -68,9 +71,17 @@ func (t *HTTPInfiniteTrap) Shutdown(ctx context.Context) error {
 
 func (t *HTTPInfiniteTrap) requestHandler(ctx *fasthttp.RequestCtx) {
 	path := string(ctx.Path())
-	log.Info().Str("path", path).Str("remote_addr", ctx.RemoteAddr().String()).Msg("Trap hit")
+	remoteIP := ctx.RemoteAddr().String()
+	userAgent := string(ctx.UserAgent())
+
+	log.Info().Str("path", path).Str("remote_addr", remoteIP).Msg("Trap hit")
 
 	telemetry.TrapsTriggered.WithLabelValues("http_infinite", path).Inc()
+
+	// Send Alert
+	if t.notifier != nil {
+		t.notifier.SendAlert("HTTPInfinite", remoteIP, userAgent)
+	}
 
 	switch path {
 	case "/robots.txt":

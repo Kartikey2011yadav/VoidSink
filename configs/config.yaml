@@ -4,6 +4,9 @@ metrics:
   enabled: true
   addr: ":9090"
 
+notification:
+  webhook_url: "" # Add your Discord/Slack webhook URL here
+
 traps:
   http_infinite:
     enabled: true
@@ -13,3 +16,7 @@ traps:
     enabled: true
     addr: ":8081"
     server_name: "api-gateway"
+  spider_trap:
+    enabled: true
+    addr: ":8082"
+    server_name: "apache"

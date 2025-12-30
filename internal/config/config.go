@@ -20,6 +20,9 @@ type Config struct {
 		Enabled bool   `koanf:"enabled"`
 		Addr    string `koanf:"addr"`
 	} `koanf:"metrics"`
+	Notification struct {
+		WebhookURL string `koanf:"webhook_url"`
+	} `koanf:"notification"`
 	Traps struct {
 		HTTPInfinite struct {
 			Enabled    bool   `koanf:"enabled"`
@@ -31,6 +34,11 @@ type Config struct {
 			Addr       string `koanf:"addr"`
 			ServerName string `koanf:"server_name"`
 		} `koanf:"json_infinite"`
+		SpiderTrap struct {
+			Enabled    bool   `koanf:"enabled"`
+			Addr       string `koanf:"addr"`
+			ServerName string `koanf:"server_name"`
+		} `koanf:"spider_trap"`
 	} `koanf:"traps"`
 }
 
