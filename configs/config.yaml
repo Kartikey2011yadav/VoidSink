@@ -9,3 +9,7 @@ traps:
     enabled: true
     addr: ":8080"
     server_name: "nginx"
+  json_infinite:
+    enabled: true
+    addr: ":8081"
+    server_name: "api-gateway"

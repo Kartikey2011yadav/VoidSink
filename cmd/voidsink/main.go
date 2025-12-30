@@ -14,6 +14,8 @@ import (
 	"github.com/Kartikey2011yadav/voidsink/internal/heffalump"
 	"github.com/Kartikey2011yadav/voidsink/internal/logger"
 	"github.com/Kartikey2011yadav/voidsink/internal/trap"
+	httptrap "github.com/Kartikey2011yadav/voidsink/internal/traps/http"
+	jsontrap "github.com/Kartikey2011yadav/voidsink/internal/traps/json"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
@@ -58,9 +60,15 @@ func main() {
 	var traps []trap.Trap
 
 	if cfg.Traps.HTTPInfinite.Enabled {
-		t := trap.NewHTTPInfiniteTrap(cfg.Traps.HTTPInfinite.Addr, cfg.Traps.HTTPInfinite.ServerName, heffalumpEngine)
+		t := httptrap.New(cfg.Traps.HTTPInfinite.Addr, cfg.Traps.HTTPInfinite.ServerName, heffalumpEngine)
 		traps = append(traps, t)
 		log.Info().Str("type", "HTTPInfinite").Str("addr", cfg.Traps.HTTPInfinite.Addr).Msg("Trap enabled")
+	}
+
+	if cfg.Traps.JSONInfinite.Enabled {
+		t := jsontrap.New(cfg.Traps.JSONInfinite.Addr, cfg.Traps.JSONInfinite.ServerName, heffalumpEngine)
+		traps = append(traps, t)
+		log.Info().Str("type", "JSONInfinite").Str("addr", cfg.Traps.JSONInfinite.Addr).Msg("Trap enabled")
 	}
 
 	if len(traps) == 0 {

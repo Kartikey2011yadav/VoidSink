@@ -26,6 +26,11 @@ type Config struct {
 			Addr       string `koanf:"addr"`
 			ServerName string `koanf:"server_name"`
 		} `koanf:"http_infinite"`
+		JSONInfinite struct {
+			Enabled    bool   `koanf:"enabled"`
+			Addr       string `koanf:"addr"`
+			ServerName string `koanf:"server_name"`
+		} `koanf:"json_infinite"`
 	} `koanf:"traps"`
 }
 

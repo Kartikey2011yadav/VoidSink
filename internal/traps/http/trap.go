@@ -1,4 +1,4 @@
-package trap
+package httptrap
 
 import (
 	"bufio"
@@ -21,8 +21,8 @@ type HTTPInfiniteTrap struct {
 	pool       *heffalump.BufferPool
 }
 
-// NewHTTPInfiniteTrap creates a new instance of HTTPInfiniteTrap.
-func NewHTTPInfiniteTrap(addr, serverName string, h *heffalump.Heffalump) *HTTPInfiniteTrap {
+// New creates a new instance of HTTPInfiniteTrap.
+func New(addr, serverName string, h *heffalump.Heffalump) *HTTPInfiniteTrap {
 	return &HTTPInfiniteTrap{
 		addr:       addr,
 		serverName: serverName,
