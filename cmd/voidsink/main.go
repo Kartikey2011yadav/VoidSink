@@ -14,6 +14,7 @@ import (
 	"github.com/Kartikey2011yadav/voidsink/internal/heffalump"
 	"github.com/Kartikey2011yadav/voidsink/internal/logger"
 	"github.com/Kartikey2011yadav/voidsink/internal/trap"
+	gziptrap "github.com/Kartikey2011yadav/voidsink/internal/traps/gzip"
 	httptrap "github.com/Kartikey2011yadav/voidsink/internal/traps/http"
 	jsontrap "github.com/Kartikey2011yadav/voidsink/internal/traps/json"
 	spidertrap "github.com/Kartikey2011yadav/voidsink/internal/traps/spider"
@@ -103,6 +104,12 @@ func initializeTraps(cfg *config.Config, h *heffalump.Heffalump, n *notifier.Not
 		t := spidertrap.New(cfg.Traps.SpiderTrap.Addr, cfg.Traps.SpiderTrap.ServerName, h, n)
 		traps = append(traps, t)
 		log.Info().Str("type", "SpiderTrap").Str("addr", cfg.Traps.SpiderTrap.Addr).Msg("Trap enabled")
+	}
+
+	if cfg.Traps.GzipInfinite.Enabled {
+		t := gziptrap.New(cfg.Traps.GzipInfinite.Addr, cfg.Traps.GzipInfinite.ServerName, n)
+		traps = append(traps, t)
+		log.Info().Str("type", "GzipInfinite").Str("addr", cfg.Traps.GzipInfinite.Addr).Msg("Trap enabled")
 	}
 
 	return traps

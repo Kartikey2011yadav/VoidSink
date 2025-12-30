@@ -39,6 +39,11 @@ type Config struct {
 			Addr       string `koanf:"addr"`
 			ServerName string `koanf:"server_name"`
 		} `koanf:"spider_trap"`
+		GzipInfinite struct {
+			Enabled    bool   `koanf:"enabled"`
+			Addr       string `koanf:"addr"`
+			ServerName string `koanf:"server_name"`
+		} `koanf:"gzip_infinite"`
 	} `koanf:"traps"`
 }
 

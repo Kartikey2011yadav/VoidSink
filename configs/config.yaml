@@ -20,3 +20,7 @@ traps:
     enabled: true
     addr: ":8082"
     server_name: "apache"
+  gzip_infinite:
+    enabled: true
+    addr: ":8083"
+    server_name: "nginx"
